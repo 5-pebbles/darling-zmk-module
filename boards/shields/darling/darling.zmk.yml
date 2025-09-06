@@ -1,0 +1,12 @@
+file_format: "1"
+id: darling
+name: darling
+type: shield
+url: https://github.com/5-pebbles/darling
+requires:
+  - pro_micro
+features:
+  - keys
+siblings:
+  - darling_left
+  - darling_right
