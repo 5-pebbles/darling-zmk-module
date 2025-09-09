@@ -1,5 +1,11 @@
 #include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+
+#define DEFAULT   0
+#define ALT_ALPHA 1
+#define SYM       2
+#define VICARFT   3
 
 / {
   keymap {
@@ -12,8 +18,21 @@
       // │  C      │  I      │  E      │  A      │   │  H      │  T      │  S      │  N      │
            &kp C     &kp I     &kp E     &kp A         &kp H     &kp T     &kp S     &kp N
       // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
-      //           │  G      │  X      │  SPACE  │   │  BSPC   │  F      │  P      │
-                     &kp G     &kp X     &kp SPACE     &kp BSPC  &kp F     &kp P
+      //           │  DEL    │  sl     │  SPACE  │   │ repeat  │  sl     │  BSPC   │
+                    &kp DEL &sl ALT_ALPHA &kp SPACE  &key_repeat &sl ALT_ALPHA &kp BSPC
+      //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
+      >;
+    };
+	alt_alpha {
+	  bindings = <
+      // ┌---------┬---------┬---------┬---------┐   ┌---------┬---------┬---------┬---------┐
+      // │ VICRAFT │  :      │  ,      │  Z      │   │  Q      │  .      │  ;      │  ESC    │
+           &trans   &kp COLON &kp COMMA  &kp Z         &kp Q     &kp DOT   &kp SEMI  &kp ESC
+      // │  G      │  X      │  J      │  K      │   │  R      │  M      │  F      │  P      │
+           &kp G     &kp X     &kp J     &kp K         &kp R     &kp M     &kp F     &kp P
+      // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
+      //           │  LSHFT  │  RET    │  SPACE  │   │  SYM    │  TAB    │  RSHFT  │
+                    &sk LSHFT  &kp RET   &kp SPACE    &kp LCTRL  &kp TAB  &sk RSHFT
       //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
       >;
     };
