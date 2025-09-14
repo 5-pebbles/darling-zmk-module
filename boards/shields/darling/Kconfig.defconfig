@@ -14,6 +14,9 @@ if SHIELD_DARLING_LEFT || SHIELD_DARLING_RIGHT
 config ZMK_SETTINGS_RESET_ON_START
     default y
 
+config ZMK_POINTING
+    default y
+
 config USB_DEVICE_MANUFACTURER
     default "Owen Friedman"
 

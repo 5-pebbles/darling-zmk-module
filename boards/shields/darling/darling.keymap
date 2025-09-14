@@ -1,13 +1,47 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/pointing.h>
+
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 20
 
 #define DEFAULT   0
 #define ALT_ALPHA 1
 #define SYM       2
-#define VICARFT   3
+#define NUM       3
+#define CTRL      4
+#define VIMCRAFT  5
 
 / {
+  combos {
+    compatible = "zmk,combos";
+    combo_nine_vimcraft {
+      timeout-ms = <50>;
+      key-positions = <6 7>; // positions of the `7` and `8` keys in vimcraft layer
+      bindings = <&kp N9>;
+      layers = <VIMCRAFT>; // only active on vimcraft layer
+    };
+    combo_to_default_vimcraft {
+      timeout-ms = <50>;
+      key-positions = <0 1>; // positions of the `1` and `2` keys in vimcraft layer
+      bindings = <&to DEFAULT>;
+      layers = <VIMCRAFT>; // only active on vimcraft layer
+    };
+    combo_scroll_up_vimcraft {
+      timeout-ms = <50>;
+      key-positions = <9 10>; // positions of the `S` and `W` keys in vimcraft layer
+      bindings = <&msc SCRL_UP>;
+      layers = <VIMCRAFT>; // only active on vimcraft layer
+    };
+    combo_scroll_down_vimcraft {
+      timeout-ms = <50>;
+      key-positions = <8 11>; // positions of the `A` and `D` keys in vimcraft layer
+      bindings = <&msc SCRL_DOWN>;
+      layers = <VIMCRAFT>; // only active on vimcraft layer
+    };
+  };
   keymap {
     compatible = "zmk,keymap";
     default_layer {
@@ -18,23 +52,82 @@
       // │  C      │  I      │  E      │  A      │   │  H      │  T      │  S      │  N      │
            &kp C     &kp I     &kp E     &kp A         &kp H     &kp T     &kp S     &kp N
       // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
-      //           │  DEL    │  sl     │  SPACE  │   │ repeat  │  sl     │  BSPC   │
-                    &kp DEL &sl ALT_ALPHA &kp SPACE  &key_repeat &sl ALT_ALPHA &kp BSPC
+      //           │  ESC    │  SPACE  │  RSHFT  │   │  sl     │  sl     │  BSPC   │
+                    &kp ESC   &kp SPACE &kp RSHFT     &sl SYM &sl ALT_ALPHA &kp BSPC
       //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
       >;
     };
-	alt_alpha {
-	  bindings = <
+    alt_alpha {
+      bindings = <
       // ┌---------┬---------┬---------┬---------┐   ┌---------┬---------┬---------┬---------┐
-      // │ VICRAFT │  :      │  ,      │  Z      │   │  Q      │  .      │  ;      │  ESC    │
-           &trans   &kp COLON &kp COMMA  &kp Z         &kp Q     &kp DOT   &kp SEMI  &kp ESC
+      // │  TAB    │  '      │  ,      │  Z      │   │  Q      │  .      │  ;      │  RET    │
+           &kp TAB   &kp SQT  &kp COMMA  &kp Z         &kp Q     &kp DOT   &kp SEMI  &kp RET
       // │  G      │  X      │  J      │  K      │   │  R      │  M      │  F      │  P      │
            &kp G     &kp X     &kp J     &kp K         &kp R     &kp M     &kp F     &kp P
       // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
-      //           │  LSHFT  │  RET    │  SPACE  │   │  SYM    │  TAB    │  RSHFT  │
-                    &sk LSHFT  &kp RET   &kp SPACE    &kp LCTRL  &kp TAB  &sk RSHFT
+      //           │  LCMD   │  LCTRL  │  LALT   │   │  sl     │  to     │  `      │
+                    &sk LCMD  &sk LCTRL &sk LALT       &sl CTRL  &to NUM  &kp GRAVE
       //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
       >;
+    };
+    sym {
+      bindings = <
+      // ┌---------┬---------┬---------┬---------┐   ┌---------┬---------┬---------┬---------┐
+      // │  #      │  |      │  [      │  ]      │   │  &      │  *      │  /      │  !      │
+          &kp POUND  &kp PIPE  &kp LBKT  &kp RBKT      &kp AMPS &kp ASTRK  &kp FSLH  &kp EXCL
+      // │  (      │  )      │  {      │  }      │   │  =      │  +      │  -      │  ?      │
+           &kp LPAR  &kp RPAR  &kp LBRC  &kp RBRC     &kp EQUAL  &kp PLUS &kp MINUS &kp QMARK
+      // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
+      //           │  DEL    │  ~      │  _      │   │  \      │  ^      │  @      │
+                     &kp DEL  &kp TILDE &kp UNDER     &kp BSLH  &kp CARET  &kp AT
+      //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
+      >;
+    };
+    num {
+      bindings = <
+      // ┌---------┬---------┬---------┬---------┐   ┌---------┬---------┬---------┬---------┐
+      // │  7      │  6      │  5      │  4      │   │  %      │  trans  │  trans  │  sl     │
+           &kp N7    &kp N6    &kp N5    &kp N4       &kp PRCNT  &trans    &trans    &sl SYM
+      // │  3      │  2      │  1      │  0      │   │  trans  │  trans  │  trans  │  sl     │
+           &kp N3    &kp N2    &kp N1    &kp N0        &trans    &trans    &trans  &sl DEFAULT
+      // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
+      //           │  9      │  8      │  trans  │   │  to     │  trans  │  BSPC   │
+                     &kp N9    &kp N8    &trans      &to DEFAULT &trans    &kp BSPC
+      //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
+      >;
+    };
+    ctrl {
+      bindings = <
+      // ┌---------┬---------┬---------┬---------┐   ┌---------┬---------┬---------┬---------┐
+      // │  F8     │  F7     │  F6     │  F5     │   │  F4     │  F3     │  F2     │  F1     │
+           &kp F8    &kp F7    &kp F6    &kp F5        &kp F4    &kp F3    &kp F2    &kp F1
+      // │  C_PWR  │  C_MUTE │  VOL_DN │  VOL_UP │   │  F12    │  F11    │  F10    │  F9     │
+        &kp C_PWR &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp F12   &kp F11   &kp F10   &kp F9
+      // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
+      //           │  BT_PRV │  BT_NXT │  BT_CLR │   │ OUT_USB │ OUT_BLE │  to     │
+                   &bt BT_PRV &bt BT_NXT &bt BT_CLR &out OUT_USB &out OUT_BLE &to VIMCRAFT
+      //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
+      >;
+    };
+    vimcraft {
+      bindings = <
+      // ┌---------┬---------┬---------┬---------┐   ┌---------┬---------┬---------┬---------┐
+      // │  1      │  2      │  3      │  4      │   │  5      │  6      │  7      │  8      │
+           &kp N1    &kp N2    &kp N3    &kp N4        &kp N5    &kp N6    &kp N7    &kp N8
+      // │  A      │  S      │  W      │  D      │   │  LEFT   │  DOWN   │  UP     │  RIGHT  │
+           &kp A     &kp S     &kp W     &kp D      &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP &mmv MOVE_RIGHT
+      // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
+      //           │  SPACE  │  LCLK   │  F      │   │  E      │  RCLK   │  LSHFT  │
+                    &kp SPACE &mkp LCLK   &kp F         &kp E   &mkp RCLK &kp LSHFT
+      //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
+      >;
+    };
+  };
+  conditional_layers {
+    compatible = "zmk,conditional-layers";
+    num_sym {
+      if-layers = <NUM>;
+      then-layer = <SYM>;
     };
   };
 };
