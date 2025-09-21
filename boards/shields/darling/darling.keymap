@@ -15,6 +15,30 @@
 #define VIMCRAFT  5
 
 / {
+  behaviors {
+    tog_on: toggle_layer_on_only {
+      compatible = "zmk,behavior-toggle-layer";
+      #binding-cells = <1>;
+      display-name = "Toggle Layer On";
+      toggle-mode = "on";
+    };
+    tog_off: toggle_layer_off_only {
+      compatible = "zmk,behavior-toggle-layer";
+      #binding-cells = <1>;
+      display-name = "Toggle Layer Off";
+      toggle-mode = "off";
+    };
+  };
+  macros {
+    to_num: to_num {
+      compatible = "zmk,behavior-macro";
+      #binding-cells = <0>;
+      bindings
+        = <&macro_tap &to NUM>
+        , <&macro_tap &tog_on SYM>
+        ;
+    };
+  };
   combos {
     compatible = "zmk,combos";
     combo_nine_vimcraft {
@@ -65,8 +89,8 @@
       // │  G      │  X      │  J      │  K      │   │  R      │  M      │  F      │  P      │
            &kp G     &kp X     &kp J     &kp K         &kp R     &kp M     &kp F     &kp P
       // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
-      //           │  LCMD   │  LCTRL  │  LALT   │   │  sl     │  to     │  `      │
-                    &sk LCMD  &sk LCTRL &sk LALT       &sl CTRL  &to NUM  &kp GRAVE
+      //           │  LCMD   │  LCTRL  │  LALT   │   │  sl     │  to_num │  `      │
+                    &sk LCMD  &sk LCTRL &sk LALT       &sl CTRL  &to_num   &kp GRAVE
       //           └---------┴---------┴---------┘   └---------┴---------┴---------┘
       >;
     };
@@ -86,10 +110,10 @@
     num {
       bindings = <
       // ┌---------┬---------┬---------┬---------┐   ┌---------┬---------┬---------┬---------┐
-      // │  7      │  6      │  5      │  4      │   │  %      │  trans  │  trans  │  sl     │
-           &kp N7    &kp N6    &kp N5    &kp N4       &kp PRCNT  &trans    &trans    &sl SYM
-      // │  3      │  2      │  1      │  0      │   │  trans  │  trans  │  trans  │  sl     │
-           &kp N3    &kp N2    &kp N1    &kp N0        &trans    &trans    &trans  &sl DEFAULT
+      // │  7      │  6      │  5      │  4      │   │  %      │  trans  │  trans  │  to_sym │
+           &kp N7    &kp N6    &kp N5    &kp N4       &kp PRCNT  &trans    &trans    &none
+      // │  3      │  2      │  1      │  0      │   │  trans  │  trans  │  trans  │  to_def │
+           &kp N3    &kp N2    &kp N1    &kp N0        &trans    &trans    &trans    &none
       // └---------┼---------┼---------┼---------┤   ├---------┼---------┼---------┼---------┘
       //           │  9      │  8      │  trans  │   │  to     │  trans  │  BSPC   │
                      &kp N9    &kp N8    &trans      &to DEFAULT &trans    &kp BSPC
@@ -123,11 +147,4 @@
       >;
     };
   };
-  // conditional_layers {
-  //   compatible = "zmk,conditional-layers";
-  //   num_sym {
-  //     if-layers = <NUM>;
-  //     then-layer = <SYM>;
-  //   };
-  // };
 };
