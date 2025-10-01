@@ -20,8 +20,6 @@
 ---
 include:
   - board: nice_nano_v2
-    shield: darling_left
+    shield: seraph_left
   - board: nice_nano_v2
-    shield: darling_right
-  - board: nice_nano_v2
-    shield: settings_reset
+    shield: seraph_right

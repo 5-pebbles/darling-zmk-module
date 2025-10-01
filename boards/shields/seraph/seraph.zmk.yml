@@ -1,0 +1,12 @@
+file_format: "1"
+id: seraph
+name: seraph
+type: shield
+url: https://github.com/5-pebbles/seraph
+requires:
+  - pro_micro
+features:
+  - keys
+siblings:
+  - seraph_left
+  - seraph_right

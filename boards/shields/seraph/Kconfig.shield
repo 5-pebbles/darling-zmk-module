@@ -1,0 +1,5 @@
+config SHIELD_SERAPH_LEFT
+    def_bool $(shields_list_contains,seraph_left)
+
+config SHIELD_SERAPH_RIGHT
+    def_bool $(shields_list_contains,seraph_right)

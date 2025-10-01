@@ -1,4 +1,4 @@
-#include "darling.dtsi"
+#include "seraph.dtsi"
 
 &default_transform {
     col-offset = <11>;
